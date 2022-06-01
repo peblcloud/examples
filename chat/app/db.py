@@ -16,12 +16,12 @@ class Message(Model):
 
 
 def connect():
-    db = pebl.mysql("mysql-1")
+    db = pebl.mysql("db")
     model_db.init("chat", unix_socket=db.unix_socket, user=db.user)
 
 
 def setup():
-    db = pebl.mysql("mysql-1")
+    db = pebl.mysql("db")
 
     conn = pymysql.connect(unix_socket=db.unix_socket, user=db.user)
     conn.cursor().execute("CREATE DATABASE IF NOT EXISTS chat")
