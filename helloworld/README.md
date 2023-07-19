@@ -9,3 +9,5 @@ and ready to work with pebl!
   2. navigate to this folder and run it with `pebl run`
   3. check the `"hello, world!"` output with `pebl info`
   4. clean up by shutting down the cluster with `pebl down`
+
+![example hello world output](./hello.png)
