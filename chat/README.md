@@ -1,22 +1,55 @@
 # chat
 
-A simple Flask application for sending and receiving messages.
+A simple [Flask application](https://flask.palletsprojects.com/en/2.3.x/) that
+implements a very basic chat service.
 
-## wsgi_run
+## running
 
-This pebl method creates an external endpoint, serving the provided Flask
-application at `hey.pebl.rocks`. The pebl platform automatically handles load
-balancing and autoscaling.
+  1. ensure your local cluster is running with `pebl up`
+  2. execute `pebl run` inside this folder
+  3. inspect the running workloads with `pebl info`
 
-With pebl, there is no need to manually manage re-using or releasing the process
-back to a managing server like gunicorn. Each request is provided a unique
-process. This allows interesting uses like the `after` argument, which runs
-after the entire response has been sent to the client.
+![example output from pebl info](./example.png)
 
+## sending requests
 
-## sleep 
+The flask app is configured with two endpoints, `/` and `/create`.
 
-Using the `after` handler, we show a unique way of implementing delayed
-messages. The `sleep` call signals to pebl that the process can be unscheduled
-for the requested duration. This allows better usage of resources than using
-standard `time.sleep` method.
+The `/` endpoint returns a list of all messages, in descending order of creation
+time.
+
+The `/create` endpoint is a `POST` endpoint, used to create new messages.
+
+```bash
+$ curl localhost:32871
+{"messages":[]}
+$ curl -XPOST -d '{"message":"hello, world!"}' localhost:32871/create
+{"message_id":1}
+$ curl localhost:32871
+{"messages":[{"content":"hello, world!","mid":1}]}
+$
+```
+
+## extra tips
+
+We really love the [jq](https://jqlang.github.io/jq/) tool when working with
+json. If installed, you can use it to create a more human readable output.
+
+```bash
+$ curl -s localhost:32871 | jq
+{
+  "messages": [
+    {
+      "content": "hello, world!",
+      "mid": 1
+    }
+  ]
+}
+$
+```
+
+## next steps
+
+Obviously it's not very useful to have a chat without any user information.
+It's also not very secure! Try adding simple user authentication, so that
+requests to the `/create` endpoint take some type of authentication scheme.

@@ -1,6 +1,6 @@
-import pebl
-import flask
 from peewee import *
+
+import pebl
 import pymysql
 
 
@@ -17,16 +17,21 @@ class Message(Model):
 
 def connect():
     db = pebl.mysql("db")
-    model_db.init("chat", unix_socket=db.unix_socket, user=db.user)
+    model_db.init(
+        "chat",
+        host=db["host"],
+        port=db["port"],
+        user=db["user"],
+        password=db["password"])
 
 
 def setup():
     db = pebl.mysql("db")
 
-    conn = pymysql.connect(unix_socket=db.unix_socket, user=db.user)
+    conn = pymysql.connect(**db)
     conn.cursor().execute("CREATE DATABASE IF NOT EXISTS chat")
     conn.close()
 
-    model_db.init("chat", unix_socket=db.unix_socket, user=db.user)
+    connect()
     model_db.create_tables([Message])
     model_db.close()
