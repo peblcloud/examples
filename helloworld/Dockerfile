@@ -1,3 +1,3 @@
-FROM registry.pebl.io/python:3.10.0
-COPY . .
+FROM peblcloud/python:0.0.9
+COPY main.py .
 ENTRYPOINT python -u main.py
