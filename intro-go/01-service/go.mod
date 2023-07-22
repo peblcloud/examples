@@ -1,4 +1,4 @@
-module pebl-tutorial
+module pebl-tutorial-01
 
 go 1.18
 
