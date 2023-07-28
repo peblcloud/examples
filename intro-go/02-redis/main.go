@@ -9,7 +9,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-
 func main() {
 	r, _ := pebl.Redis("redis-1")
 	rdb := redis.NewClient(&redis.Options{

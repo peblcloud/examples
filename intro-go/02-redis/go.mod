@@ -3,7 +3,7 @@ module pebl-tutorial-02
 go 1.18
 
 require (
-	github.com/peblcloud/go v0.0.9
+	github.com/peblcloud/go v0.0.10
 	github.com/redis/go-redis/v9 v9.0.5
 )
 
