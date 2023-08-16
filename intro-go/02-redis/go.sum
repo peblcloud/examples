@@ -6,5 +6,9 @@ github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/r
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/peblcloud/go v0.0.10 h1:rPOoK/8PjjXxkMg9svsFZ2Fx8LBspkNyNW1lxbwtyI0=
 github.com/peblcloud/go v0.0.10/go.mod h1:usx6231jnonMEhvOI9xs9uyYtWytzBCP/s4tAiJkNBg=
+github.com/peblcloud/go v0.0.11-0.20230815083640-56556c014da0 h1:HNk5ytght+u6tMGRhNBIyHH1VAs6EuD6m09mhKhRYEM=
+github.com/peblcloud/go v0.0.11-0.20230815083640-56556c014da0/go.mod h1:usx6231jnonMEhvOI9xs9uyYtWytzBCP/s4tAiJkNBg=
+github.com/peblcloud/go v0.1.0 h1:dHMBbrajKF7V43ysEbySmRJav8c6Af4X9Ij0d4bD+4E=
+github.com/peblcloud/go v0.1.0/go.mod h1:usx6231jnonMEhvOI9xs9uyYtWytzBCP/s4tAiJkNBg=
 github.com/redis/go-redis/v9 v9.0.5 h1:CuQcn5HIEeK7BgElubPP8CGtE0KakrnbBSTLjathl5o=
 github.com/redis/go-redis/v9 v9.0.5/go.mod h1:WqMKv5vnQbRuZstUwxQI195wHy+t4PuXDOjzMvcuQHk=
