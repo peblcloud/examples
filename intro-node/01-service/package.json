@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pebl": "0.0.10"
+    "pebl": "0.1.0"
   }
 }
