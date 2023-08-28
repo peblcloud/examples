@@ -1,0 +1,222 @@
+<html>
+
+<head>
+  <title>tic tac toe with pebl</title>
+  <style>
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background: #EEE;
+
+      min-height: 100%;
+      font-family: sans-serif;
+    }
+
+    #room {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .board {
+      display: flex;
+      flex-wrap: wrap;
+
+      width: 300px;
+      height: 300px;
+    }
+
+    .tile {
+      cursor: pointer;
+
+      width: 100px;
+      height: 100px;
+
+      line-height: 100px;
+      text-align: center;
+
+      font-weight: bold;
+
+      border: 1px solid black;
+      box-sizing: border-box;
+    }
+
+    .tile:hover {
+      background: #FFC200;
+    }
+
+    button {
+      cursor: pointer;
+      background: #FFF;
+
+      border: 2px solid #1F18C0;
+      border-radius: 4px;
+
+      padding: 8px 16px;
+    }
+  </style>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let player = undefined;
+    let room = undefined;
+
+    socket.on("state", (state) => {
+      updateState(state);
+    })
+
+    socket.on("player", (otherPlayer) => {
+      console.log(otherPlayer);
+      if (player === undefined) {
+        if (otherPlayer === "0") {
+          player = "1";
+        } else {
+          player = "0";
+        }
+
+        document.getElementById("player-picker").setAttribute("style", "display: none");
+        document.getElementById("player").innerHTML = player === "0" ? "You are player 1" : "You are player 2"
+      }
+    })
+
+    const createRoom = () => {
+      fetch('/create')
+        .then((res) => res.json())
+        .then((res) => {
+          const room = res.id;
+          window.location.replace(`/${room}`);
+        })
+    }
+
+    const become = (n) => {
+      if (room === undefined) {
+        return;
+      }
+      player = n.toString();
+      socket.emit("become", room, player);
+      document.getElementById("player-picker").setAttribute("style", "display: none");
+      document.getElementById("player").innerHTML = n === 0 ? "You are player 1" : "You are player 2"
+    }
+
+    const play = (n) => {
+      if (room === undefined) {
+        return;
+      }
+      if (player === undefined) {
+        return;
+      }
+      if (document.getElementById(n).innerHTML === "") {
+        socket.emit("play", room, player, n);
+      }
+    };
+
+    const reset = () => {
+      if (room === undefined) {
+        return;
+      }
+
+      socket.emit("reset", room);
+    }
+
+    const updateState = (state) => {
+      let numMoves = 0;
+      for (let i = 0; i < 9; i++) {
+        const n = i.toString();
+        const move = state[n];
+        if (move === undefined) {
+          document.getElementById(n).innerHTML = "";
+          continue;
+        }
+
+        if (move === "0") {
+          document.getElementById(n).innerHTML = "X";
+        } else {
+          document.getElementById(n).innerHTML = "O";
+        }
+        numMoves += 1;
+      }
+
+      if (numMoves % 2 === 0) {
+        document.getElementById("turn").innerHTML = "next turn: player 1 (X)";
+      } else {
+        document.getElementById("turn").innerHTML = "next turn: player 2 (O)";
+      }
+    }
+
+    const joinRoom = () => {
+      const id = document.getElementById("input").value;
+      if (id.length !== 4) {
+        return;
+      }
+
+      window.location.replace(`/${id}`);
+    }
+
+    const init = () => {
+      if (window.location.pathname === "/") {
+        document.getElementById("play").setAttribute("style", "display: none;");
+        return;
+      } else {
+        document.getElementById("room").setAttribute("style", "display: none;");
+        room = window.location.pathname.slice(1);
+        if (room.length !== 4) {
+          room = undefined;
+          return;
+        }
+        document.getElementById("room-id").innerHTML = `Room ID: ${room}`;
+        socket.emit("join", room);
+      }
+    };
+
+    window.onload = init;
+
+  </script>
+</head>
+
+<body>
+  <div class="page">
+    <h1>Tic-Tac-Toe</h1>
+
+    <div id="room">
+      <h2>create a new room</h2>
+      <button onclick="createRoom()">create new room</button>
+      <h2>or put in an existing room id</h2>
+      <div>
+        <input id="input" placeholder="room id" /><button onclick="joinRoom()">Go!</button>
+      </div>
+    </div>
+
+    <div id="play">
+
+      <h2 id="room-id"></h2>
+      <h2 id="player"></h2>
+
+      <div id="player-picker">
+        <button onclick="become(0)">player 1</button>
+        <button onclick="become(1)">player 2</button>
+      </div>
+
+      <div id="turn"></div>
+
+      <div class="board">
+        <div id="0" class="tile" onclick='play("0")'></div>
+        <div id="1" class="tile" onclick='play("1")'></div>
+        <div id="2" class="tile" onclick='play("2")'></div>
+        <div id="3" class="tile" onclick='play("3")'></div>
+        <div id="4" class="tile" onclick='play("4")'></div>
+        <div id="5" class="tile" onclick='play("5")'></div>
+        <div id="6" class="tile" onclick='play("6")'></div>
+        <div id="7" class="tile" onclick='play("7")'></div>
+        <div id="8" class="tile" onclick='play("8")'></div>
+      </div>
+
+      <button onclick="reset()">reset</button>
+    </div>
+  </div>
+</body>
+
+</html>
